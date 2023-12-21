@@ -2,14 +2,14 @@ module Arachnid
   class Resource
     # Represents a parsed HTML page
     class HTML < Resource
-      @parser : Myhtml::Parser
+      @parser : Lexbor::Parser
 
       delegate :body, :body!, :head, :head!, :root, :root!, :html, :html!, :document!,
-               :nodes, :css, :to_html, :to_pretty_html, :encoding, to: @parser
+        :nodes, :css, :to_html, :to_pretty_html, :encoding, to: @parser
 
       def initialize(uri, response)
         super(uri, response)
-        @parser = Myhtml::Parser.new(response.body, detect_encoding_from_meta: true)
+        @parser = Lexbor::Parser.new(response.body)
       end
 
       def title

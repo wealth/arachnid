@@ -4,6 +4,8 @@ describe Arachnid do
   # TODO: Write tests
 
   it "works" do
-    false.should eq(true)
+    agent = Arachnid::Agent.new
+    agent.enqueue("https://crystal-lang.org")
+    agent.start
   end
 end

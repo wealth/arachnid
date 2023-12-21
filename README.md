@@ -1,8 +1,8 @@
 # Arachnid
 
-### This project is no longer maintained. Please see [Mechanize](https://github.com/Kanezoh/mechanize.cr) for an alternative.
+Originally watzon/arachnid (https://github.com/watzon/arachnid)
 
-Arachnid is a fast, soon to be multi-threading capable web crawler for Crystal. It recenty underwent a full rewrite for Crystal 0.35.1, so see the documentation below for updated usage instructions.
+Arachnid is a fast, soon to be multi-threading capable web crawler for Crystal.
 
 ## Installation
 
@@ -11,7 +11,7 @@ Arachnid is a fast, soon to be multi-threading capable web crawler for Crystal. 
    ```yaml
    dependencies:
      arachnid:
-       github: watzon/arachnid
+       github: wealth/arachnid
    ```
 
 2. Run `shards install`
@@ -130,7 +130,7 @@ The `#site` and `#host` methods add a default accept filter in order to keep thi
 
 ### Resources
 
-All the above is useless if you can't do anything with the scanned resources, which is why we have the `Resource` class. Every scanned resource is converted into a `Resource` (or subclass) based on the content type. For instance, `text/html` becomes a `Resource::HTML` which is parsed using [kostya/myhtml](https://github.com/kostya/myhtml) for extra speed.
+All the above is useless if you can't do anything with the scanned resources, which is why we have the `Resource` class. Every scanned resource is converted into a `Resource` (or subclass) based on the content type. For instance, `text/html` becomes a `Resource::HTML` which is parsed using [kostya/lexbor](https://github.com/kostya/lexbor) for extra speed.
 
 Each resource has an associated `Agent#on_` method so you can do something when one of those resources is scanned:
 
@@ -156,7 +156,7 @@ There is also `#on_resource` which is called for every resource, including ones 
 
 ## Contributing
 
-1. Fork it (<https://github.com/watzon/arachnid/fork>)
+1. Fork it (<https://github.com/wealth/arachnid/fork>)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
@@ -164,4 +164,4 @@ There is also `#on_resource` which is called for every resource, including ones 
 
 ## Contributors
 
-- [your-name-here](https://github.com/watzon) - creator and maintainer
+- [your-name-here](https://github.com/wealth) - creator and maintainer

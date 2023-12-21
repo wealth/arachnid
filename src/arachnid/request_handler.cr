@@ -29,7 +29,7 @@ module Arachnid
     # Create a new `RequestHandler` instance.
     def initialize(@base_client,
                    @tls_contexts = {} of String => HTTP::Client::TLSContext,
-                   @max_pool_size  = 10,
+                   @max_pool_size = 10,
                    @initial_pool_size = 1,
                    @connection_timeout = 1.second)
       @session_pools = {} of String => ConnectionPool(HTTP::Client)
@@ -39,15 +39,26 @@ module Arachnid
     # throw an `IO::TimeoutError` if a request is made and a new client isn't fetched in time.
     def request(method, url : String | URI, headers = nil)
       uri = url.is_a?(URI) ? url : URI.parse(url)
-      pool_for(url).use do |client|
-        client.exec(method.to_s.upcase, uri.full_path, headers: headers)
-      end
+      client = pool_for(url).checkout
+      response = client.exec(method.to_s.upcase, uri.request_target, headers: headers)
+      pool_for(url).checkin(client)
+      response
     end
 
     # Retrieve the connection pool for the given `URI`.
     def pool_for(uri : URI)
       if host = uri.host
-        session_pools[host] ||= ConnectionPool(HTTP::Client).new(capacity: @max_pool_size, initial: @initial_pool_size, timeout: @connection_timeout.total_seconds) do
+        # session_pools[host] ||= ConnectionPool(HTTP::Client).new(
+        #   capacity: @max_pool_size,
+        #   initial: @initial_pool_size,
+        #   timeout: @connection_timeout.total_seconds
+        # ) do
+        #   @base_client.new(host.to_s, tls: @tls_contexts[host.to_s]? || uri.scheme == "https")
+        # end
+        session_pools[host] ||= ConnectionPool(HTTP::Client).new(
+          capacity: @max_pool_size,
+          timeout: @connection_timeout
+        ) do
           @base_client.new(host.to_s, tls: @tls_contexts[host.to_s]? || uri.scheme == "https")
         end
       else

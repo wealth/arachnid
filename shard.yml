@@ -1,17 +1,21 @@
 name: arachnid
-version: 0.3.0
+version: 0.3.1
 
 authors:
   - Chris Watson <cawatson1993@gmail.com>
+  - wealth <yukai@pm.me>
 
 dependencies:
+  # lake:
+  #   github: sam0x17/lake
+  #   branch: master
   pool:
-    github: watzon/pool
-    branch: master
-  myhtml:
-    github: kostya/myhtml
+    github: ysbaddaden/pool
+    branch: main
+  lexbor:
+    github: kostya/lexbor
     branch: master
 
-crystal: 0.35.0
+crystal: 1.10.1
 
 license: MIT
