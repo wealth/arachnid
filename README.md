@@ -130,7 +130,7 @@ The `#site` and `#host` methods add a default accept filter in order to keep thi
 
 ### Resources
 
-All the above is useless if you can't do anything with the scanned resources, which is why we have the `Resource` class. Every scanned resource is converted into a `Resource` (or subclass) based on the content type. For instance, `text/html` becomes a `Resource::HTML` which is parsed using [kostya/lexbor](https://github.com/kostya/lexbor) for extra speed.
+All the above is useless if you can't do anything with the scanned resources, which is why we have the `Resource` class. Every scanned resource is converted into a `Resource` (or subclass) based on the content type. For instance, `text/html` becomes a `Resource::HTML` which is parsed using [naqvis/crystal-html5](https://github.com/naqvis/crystal-html5).
 
 Each resource has an associated `Agent#on_` method so you can do something when one of those resources is scanned:
 
