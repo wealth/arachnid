@@ -3,7 +3,6 @@ version: 0.3.1
 
 authors:
   - Chris Watson <cawatson1993@gmail.com>
-  - wealth <yukai@pm.me>
 
 dependencies:
   # lake:
@@ -12,9 +11,8 @@ dependencies:
   pool:
     github: ysbaddaden/pool
     branch: main
-  lexbor:
-    github: kostya/lexbor
-    branch: master
+  html5:
+    github: naqvis/crystal-html5
 
 crystal: 1.10.1
 

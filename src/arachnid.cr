@@ -1,6 +1,6 @@
 require "http/client"
 
-require "lexbor"
+require "html5"
 require "pool/connection"
 
 require "./ext/*"

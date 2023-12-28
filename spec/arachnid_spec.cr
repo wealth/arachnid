@@ -6,6 +6,7 @@ describe Arachnid do
   it "works" do
     agent = Arachnid::Agent.new
     agent.enqueue("https://crystal-lang.org")
+    agent.accept_filter { |p| false }
     agent.start
   end
 end

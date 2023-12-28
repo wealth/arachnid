@@ -2,14 +2,14 @@ module Arachnid
   class Resource
     # Represents a parsed HTML page
     class HTML < Resource
-      @parser : Lexbor::Parser
+      @parser : HTML5::Node
 
       delegate :body, :body!, :head, :head!, :root, :root!, :html, :html!, :document!,
         :nodes, :css, :to_html, :to_pretty_html, :encoding, to: @parser
 
       def initialize(uri, response)
         super(uri, response)
-        @parser = Lexbor::Parser.new(response.body)
+        @parser = HTML5.parse(response.body)
       end
 
       def title
@@ -23,8 +23,8 @@ module Arachnid
 
       def each_meta_redirect(&block : URI ->)
         css("meta[http-equiv=\"refresh\"]").each do |tag|
-          if content = tag.attribute_by("content")
-            if (redirect = content.match(/url=(\S+)$/))
+          if content = tag["content"]?
+            if (redirect = content.val.match(/url=(\S+)$/))
               uri = @uri.resolve(redirect[1])
               yield uri
             end
@@ -56,8 +56,8 @@ module Arachnid
 
       def each_mailto(&block : String ->)
         css("a[href^=\"mailto:\"]").each do |tag|
-          if content = tag.attribute_by("href")
-            if match = content.match("mailto:(.*)")
+          if content = tag["href"]?
+            if match = content.val.match("mailto:(.*)")
               yield match[1]
             end
           end
@@ -72,9 +72,9 @@ module Arachnid
 
       def each_link(&block : URI ->)
         css("a").each do |tag|
-          if href = tag.attribute_by("href")
-            unless href.match(/^(javascript|mailto|tel)/)
-              uri = @uri.resolve(href)
+          if href = tag["href"]?
+            unless href.val.match(/^(javascript|mailto|tel)/)
+              uri = @uri.resolve(href.val)
               block.call(uri) if uri.host
             end
           end
@@ -89,13 +89,13 @@ module Arachnid
 
       def each_image(&block : URI ->)
         css("img").each do |tag|
-          if src = tag.attribute_by("src")
-            uri = @uri.resolve(src)
+          if src = tag["src"]?
+            uri = @uri.resolve(src.val)
             yield uri
           end
 
-          if srcset = tag.attribute_by("srcset")
-            parts = srcset.split(",")
+          if srcset = tag["srcset"]?
+            parts = srcset.val.split(",")
             parts.each do |set|
               url = set.split(/\s+/).first
               uri = @uri.resolve(url)
@@ -113,8 +113,8 @@ module Arachnid
 
       def each_video(&block : URI ->)
         css("video, video source").each do |tag|
-          if src = tag.attribute_by("src")
-            uri = @uri.resolve(src)
+          if src = tag["src"]?
+            uri = @uri.resolve(src.val)
             yield uri
           end
         end
@@ -128,8 +128,8 @@ module Arachnid
 
       def each_script(&block : URI ->)
         css("script").each do |tag|
-          if src = tag.attribute_by("src")
-            uri = @uri.resolve(src)
+          if src = tag["src"]?
+            uri = @uri.resolve(src.val)
             yield uri
           end
         end
@@ -143,8 +143,8 @@ module Arachnid
 
       def each_resource(&block : URI ->)
         css("link").each do |tag|
-          if href = tag.attribute_by("href")
-            uri = @uri.resolve(href)
+          if href = tag["href"]
+            uri = @uri.resolve(href.val)
             yield uri
           end
         end
@@ -158,8 +158,8 @@ module Arachnid
 
       def each_frame(&block : URI ->)
         css("frame").each do |tag|
-          if src = tag.attribute_by("src")
-            uri = @uri.resolve(src)
+          if src = tag["src"]?
+            uri = @uri.resolve(src.val)
             yield uri
           end
         end
@@ -173,8 +173,8 @@ module Arachnid
 
       def each_iframe(&block : URI ->)
         css("iframe").each do |tag|
-          if src = tag.attribute_by("src")
-            uri = @uri.resolve(src)
+          if src = tag["src"]?
+            uri = @uri.resolve(src.val)
             yield uri
           end
         end
